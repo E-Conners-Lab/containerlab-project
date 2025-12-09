@@ -7,16 +7,32 @@ This script queries NetBox and generates a pyATS-compatible testbed file.
 Usage:
     python scripts/netbox_generate_testbed.py
     python scripts/netbox_generate_testbed.py --output custom_testbed.yml
+
+Environment variables (set in .env file):
+    NETBOX_URL - NetBox server URL
+    NETBOX_TOKEN - NetBox API token
+    ROUTER_USERNAME - Router login username
+    ROUTER_PASSWORD - Router login password
 """
 import argparse
+import os
 import pynetbox
 import yaml
 import urllib3
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-NETBOX_URL = "http://192.168.68.53:8000"
-NETBOX_TOKEN = "0123456789abcdef0123456789abcdef01234567"
+NETBOX_URL = os.environ.get("NETBOX_URL")
+NETBOX_TOKEN = os.environ.get("NETBOX_TOKEN")
+ROUTER_USERNAME = os.environ.get("ROUTER_USERNAME", "admin")
+ROUTER_PASSWORD = os.environ.get("ROUTER_PASSWORD", "admin")
+
+if not NETBOX_URL or not NETBOX_TOKEN:
+    raise ValueError("NETBOX_URL and NETBOX_TOKEN must be set in .env file")
 
 
 def get_loopback_ip(device, nb):
@@ -51,8 +67,8 @@ def main():
             'name': 'E-University MPLS Lab (from NetBox)',
             'credentials': {
                 'default': {
-                    'username': 'admin',
-                    'password': 'admin'
+                    'username': ROUTER_USERNAME,
+                    'password': ROUTER_PASSWORD
                 }
             }
         },

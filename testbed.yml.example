@@ -1,0 +1,39 @@
+---
+# E-University MPLS Lab - pyATS Testbed Template
+# Copy this file to testbed.yml and update credentials
+# Or generate from NetBox: python scripts/netbox_generate_testbed.py
+
+testbed:
+  name: E-University MPLS Lab
+  credentials:
+    default:
+      username: "%ENV{ROUTER_USERNAME}"
+      password: "%ENV{ROUTER_PASSWORD}"
+
+devices:
+  # Core Ring
+  core1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.200
+        port: 22
+    custom:
+      loopback0: 10.255.1.1
+
+  core2:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.202
+        port: 22
+    custom:
+      loopback0: 10.255.1.2
+
+  # ... (add remaining devices as needed)
+  # Recommended: Generate from NetBox using:
+  #   python scripts/netbox_generate_testbed.py

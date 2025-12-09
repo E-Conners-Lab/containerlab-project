@@ -4,7 +4,7 @@
 - **Phase:** Phase 5 Complete - Ready for Phase 6
 - **Lab Status:** All 19 routers healthy on clab-host
 - **Phases Completed:** 1 (Core Ring OSPF), 2 (MPLS LDP), 3 (MP-BGP Route Reflectors), 4 (Internet Gateways), 5 (Main Campus)
-- **NetBox:** Deployed at http://192.168.68.53:8000 (admin/admin123)
+- **NetBox:** See .env file for URL and credentials
 
 ## Next Steps
 1. Populate NetBox with lab data: `python scripts/netbox_populate.py`
@@ -13,12 +13,14 @@
 ## Infrastructure
 | Resource | Details |
 |----------|---------|
-| ContainerLab Host | 192.168.68.53 (Ubuntu 22.04, 98GB RAM) |
-| NetBox | http://192.168.68.53:8000 (admin / admin123) |
-| NetBox API Token | 0123456789abcdef0123456789abcdef01234567 |
+| ContainerLab Host | See CLAB_HOST in .env |
+| NetBox | See NETBOX_URL in .env |
+| NetBox API Token | See NETBOX_TOKEN in .env |
 | Router Image | vrnetlab/cisco_c8000v:17.13.01a |
-| Router Credentials | admin / admin |
-| SSH Access | elliot / admin123 |
+| Router Credentials | See ROUTER_USERNAME/ROUTER_PASSWORD in .env |
+| SSH Access | See CLAB_SSH_USER/CLAB_SSH_PASSWORD in .env |
+
+**Note:** All credentials are stored in `.env` (not committed to git). Copy `.env.example` to `.env` and configure.
 
 ## Topology Overview
 19 C8000v routers + 3 Alpine Linux hosts
@@ -179,13 +181,13 @@ pytest tests/test_phaseX.py -v
 
 ## Quick Commands
 ```bash
-# SSH to clab-host
-ssh elliot@192.168.68.53
+# SSH to clab-host (use credentials from .env)
+ssh $CLAB_SSH_USER@$CLAB_HOST
 
 # Check router health
 docker ps --format "table {{.Names}}\t{{.Status}}" | grep healthy
 
-# Clear SSH keys (Mac)
+# Clear SSH keys (Mac) - update IPs as needed
 for ip in 192.168.68.{200,202,203,204,205,206,208,209,210,211,212,213,214,215,216,251}; do ssh-keygen -R $ip; done
 
 # Run all tests

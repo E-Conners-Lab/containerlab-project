@@ -7,15 +7,27 @@ in NetBox based on the lab topology.
 
 Usage:
     python scripts/netbox_populate.py
+
+Environment variables (set in .env file):
+    NETBOX_URL - NetBox server URL
+    NETBOX_TOKEN - NetBox API token
 """
+import os
 import pynetbox
 import urllib3
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 # Disable SSL warnings for lab environment
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-NETBOX_URL = "http://192.168.68.53:8000"
-NETBOX_TOKEN = "0123456789abcdef0123456789abcdef01234567"
+NETBOX_URL = os.environ.get("NETBOX_URL")
+NETBOX_TOKEN = os.environ.get("NETBOX_TOKEN")
+
+if not NETBOX_URL or not NETBOX_TOKEN:
+    raise ValueError("NETBOX_URL and NETBOX_TOKEN must be set in .env file")
 
 # Lab data
 SITE_NAME = "E-University Lab"

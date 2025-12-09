@@ -9,6 +9,10 @@ Usage:
     python scripts/netbox_generate_configs.py --phase 1
     python scripts/netbox_generate_configs.py --phase 1 --device core1
     python scripts/netbox_generate_configs.py --phase 1 --dry-run
+
+Environment variables (set in .env file):
+    NETBOX_URL - NetBox server URL
+    NETBOX_TOKEN - NetBox API token
 """
 import argparse
 import os
@@ -16,11 +20,18 @@ from pathlib import Path
 import pynetbox
 from jinja2 import Environment, FileSystemLoader
 import urllib3
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-NETBOX_URL = "http://192.168.68.53:8000"
-NETBOX_TOKEN = "0123456789abcdef0123456789abcdef01234567"
+NETBOX_URL = os.environ.get("NETBOX_URL")
+NETBOX_TOKEN = os.environ.get("NETBOX_TOKEN")
+
+if not NETBOX_URL or not NETBOX_TOKEN:
+    raise ValueError("NETBOX_URL and NETBOX_TOKEN must be set in .env file")
 
 BGP_AS = 65001
 ROUTE_REFLECTORS = ['core1', 'core2', 'core5']

@@ -141,17 +141,20 @@ This project follows TDD methodology:
 - **NetBox** - IPAM/DCIM Source of Truth
 - **Jinja2** - Configuration templating
 
-## Device Credentials
+## Credentials Setup
 
-| Type | Username | Password |
-|------|----------|----------|
-| Routers | admin | admin |
-| clab-host | username | password
-| NetBox | username | password
+Credentials are managed via environment variables. Copy `.env.example` to `.env` and configure:
+
+```bash
+cp .env.example .env
+# Edit .env with your actual credentials
+```
+
+See `.env.example` for required variables.
 
 ## NetBox Integration
 
-NetBox is deployed at http://192.168.68.53:8000 as the Source of Truth.
+NetBox serves as the Source of Truth for this lab.
 
 ```bash
 # Populate NetBox with lab data (one-time)
