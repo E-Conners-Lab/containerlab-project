@@ -1,0 +1,10 @@
+! {{ device.name }} - Phase 2: MPLS LDP Configuration
+! Generated from NetBox
+
+mpls ldp router-id Loopback0 force
+
+{% for intf in mpls_interfaces %}
+interface {{ intf.name }}
+ mpls ip
+
+{% endfor %}

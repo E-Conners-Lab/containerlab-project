@@ -1,0 +1,105 @@
+name: containerlab-euniv
+
+mgmt:
+  network: euniv-mgmt
+
+topology:
+  defaults:
+    kind: cisco_c8000v
+    image: vrnetlab/cisco_c8000v:17.13.01a
+
+  nodes:
+    # Core Layer
+    core1:
+      mgmt-ipv4: 192.168.68.200
+    core2:
+      mgmt-ipv4: 192.168.68.202
+    core3:
+      mgmt-ipv4: 192.168.68.203
+    core4:
+      mgmt-ipv4: 192.168.68.204
+    core5:
+      mgmt-ipv4: 192.168.68.205
+    # Internet Gateways
+    inet-gw1:
+      mgmt-ipv4: 192.168.68.206
+    inet-gw2:
+      mgmt-ipv4: 192.168.68.251
+    # Main Campus
+    main-agg1:
+      mgmt-ipv4: 192.168.68.208
+    main-edge1:
+      mgmt-ipv4: 192.168.68.209
+    main-edge2:
+      mgmt-ipv4: 192.168.68.210
+    main-asw1:
+      mgmt-ipv4: 192.168.68.253
+    # Medical Campus
+    med-agg1:
+      mgmt-ipv4: 192.168.68.211
+    med-edge1:
+      mgmt-ipv4: 192.168.68.212
+    med-edge2:
+      mgmt-ipv4: 192.168.68.213
+    med-asw1:
+      mgmt-ipv4: 192.168.68.252
+    # Research Campus
+    res-agg1:
+      mgmt-ipv4: 192.168.68.214
+    res-edge1:
+      mgmt-ipv4: 192.168.68.215
+    res-edge2:
+      mgmt-ipv4: 192.168.68.216
+    res-asw1:
+      mgmt-ipv4: 192.168.68.254
+    # Test Hosts
+    main-host1:
+      kind: linux
+      image: alpine:latest
+      mgmt-ipv4: 192.168.68.217
+    med-host1:
+      kind: linux
+      image: alpine:latest
+      mgmt-ipv4: 192.168.68.218
+    res-host1:
+      kind: linux
+      image: alpine:latest
+      mgmt-ipv4: 192.168.68.219
+
+  links:
+    # Core Ring (per TOPOLOGY_GUIDE)
+    - endpoints: ["core1:Gi2", "core2:Gi2"]
+    - endpoints: ["core2:Gi3", "core3:Gi2"]
+    - endpoints: ["core3:Gi3", "core4:Gi2"]
+    - endpoints: ["core4:Gi3", "core5:Gi2"]
+    - endpoints: ["core5:Gi3", "core1:Gi3"]
+    # Internet Gateways (per TOPOLOGY_GUIDE)
+    - endpoints: ["core1:Gi4", "inet-gw1:Gi2"]
+    - endpoints: ["core2:Gi4", "inet-gw2:Gi2"]
+    # Main Campus (per TOPOLOGY_GUIDE)
+    - endpoints: ["core1:Gi5", "main-agg1:Gi2"]
+    - endpoints: ["core2:Gi5", "main-agg1:Gi3"]
+    - endpoints: ["main-agg1:Gi4", "main-edge1:Gi2"]
+    - endpoints: ["main-agg1:Gi5", "main-edge2:Gi2"]
+    - endpoints: ["main-edge1:Gi3", "main-edge2:Gi3"]
+    - endpoints: ["main-edge1:Gi4", "main-asw1:Gi2"]
+    - endpoints: ["main-edge2:Gi4", "main-asw1:Gi3"]
+    - endpoints: ["main-asw1:Gi4", "main-host1:eth1"]
+    # Medical Campus (per TOPOLOGY_GUIDE)
+    - endpoints: ["core2:Gi6", "med-agg1:Gi2"]
+    - endpoints: ["core3:Gi4", "med-agg1:Gi3"]
+    - endpoints: ["med-agg1:Gi4", "med-edge1:Gi2"]
+    - endpoints: ["med-agg1:Gi5", "med-edge2:Gi2"]
+    - endpoints: ["med-edge1:Gi3", "med-edge2:Gi3"]
+    - endpoints: ["med-edge1:Gi4", "med-asw1:Gi2"]
+    - endpoints: ["med-edge2:Gi4", "med-asw1:Gi3"]
+    - endpoints: ["med-asw1:Gi4", "med-host1:eth1"]
+    # Research Campus (per TOPOLOGY_GUIDE)
+    - endpoints: ["core4:Gi4", "res-agg1:Gi2"]
+    - endpoints: ["core5:Gi4", "res-agg1:Gi3"]
+    - endpoints: ["res-agg1:Gi4", "res-edge1:Gi2"]
+    - endpoints: ["res-agg1:Gi5", "res-edge2:Gi2"]
+    - endpoints: ["res-edge1:Gi3", "res-edge2:Gi3"]
+    - endpoints: ["res-edge1:Gi4", "res-asw1:Gi2"]
+    - endpoints: ["res-edge2:Gi4", "res-asw1:Gi3"]
+    - endpoints: ["res-asw1:Gi4", "res-host1:eth1"]

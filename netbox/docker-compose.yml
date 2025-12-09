@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  netbox:
+    image: netboxcommunity/netbox:v4.0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    env_file: env/netbox.env
+    ports:
+      - "8000:8080"
+    volumes:
+      - netbox-media:/opt/netbox/netbox/media
+      - netbox-reports:/opt/netbox/netbox/reports
+      - netbox-scripts:/opt/netbox/netbox/scripts
+    restart: unless-stopped
+
+  netbox-worker:
+    image: netboxcommunity/netbox:v4.0
+    depends_on:
+      netbox:
+        condition: service_started
+    env_file: env/netbox.env
+    command: /opt/netbox/venv/bin/python /opt/netbox/netbox/manage.py rqworker
+    restart: unless-stopped
+
+  netbox-housekeeping:
+    image: netboxcommunity/netbox:v4.0
+    depends_on:
+      netbox:
+        condition: service_started
+    env_file: env/netbox.env
+    command: /opt/netbox/housekeeping.sh
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16-alpine
+    env_file: env/postgres.env
+    volumes:
+      - netbox-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U netbox"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - netbox-redis:/data
+    restart: unless-stopped
+
+volumes:
+  netbox-media:
+  netbox-reports:
+  netbox-scripts:
+  netbox-postgres:
+  netbox-redis:

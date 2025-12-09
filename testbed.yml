@@ -1,0 +1,232 @@
+---
+testbed:
+  name: E-University MPLS Lab
+  credentials:
+    default:
+      username: admin
+      password: admin
+
+devices:
+  # Core Ring
+  core1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.200
+        port: 22
+    custom:
+      loopback0: 10.255.1.1
+
+  core2:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.202
+        port: 22
+    custom:
+      loopback0: 10.255.1.2
+
+  core3:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.203
+        port: 22
+    custom:
+      loopback0: 10.255.1.3
+
+  core4:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.204
+        port: 22
+    custom:
+      loopback0: 10.255.1.4
+
+  core5:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.205
+        port: 22
+    custom:
+      loopback0: 10.255.1.5
+
+  # Internet Gateways
+  inet-gw1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.206
+        port: 22
+    custom:
+      loopback0: 10.255.0.1
+
+  inet-gw2:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.251
+        port: 22
+    custom:
+      loopback0: 10.255.0.2
+
+  # Main Campus
+  main-agg1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.208
+        port: 22
+    custom:
+      loopback0: 10.255.10.1
+
+  main-edge1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.209
+        port: 22
+    custom:
+      loopback0: 10.255.10.2
+
+  main-edge2:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.210
+        port: 22
+    custom:
+      loopback0: 10.255.10.3
+
+  # Medical Campus
+  med-agg1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.211
+        port: 22
+    custom:
+      loopback0: 10.255.20.1
+
+  med-edge1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.212
+        port: 22
+    custom:
+      loopback0: 10.255.20.2
+
+  med-edge2:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.213
+        port: 22
+    custom:
+      loopback0: 10.255.20.3
+
+  # Research Campus
+  res-agg1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.214
+        port: 22
+    custom:
+      loopback0: 10.255.30.1
+
+  res-edge1:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.215
+        port: 22
+    custom:
+      loopback0: 10.255.30.2
+
+  res-edge2:
+    os: iosxe
+    type: router
+    connections:
+      cli:
+        protocol: ssh
+        ip: 192.168.68.216
+        port: 22
+    custom:
+      loopback0: 10.255.30.3
+
+topology:
+  # Core Ring connections
+  core1:
+    interfaces:
+      GigabitEthernet2:
+        link: core1-core2
+        type: ethernet
+      GigabitEthernet3:
+        link: core5-core1
+        type: ethernet
+  core2:
+    interfaces:
+      GigabitEthernet2:
+        link: core1-core2
+        type: ethernet
+      GigabitEthernet3:
+        link: core2-core3
+        type: ethernet
+  core3:
+    interfaces:
+      GigabitEthernet2:
+        link: core2-core3
+        type: ethernet
+      GigabitEthernet3:
+        link: core3-core4
+        type: ethernet
+  core4:
+    interfaces:
+      GigabitEthernet2:
+        link: core3-core4
+        type: ethernet
+      GigabitEthernet3:
+        link: core4-core5
+        type: ethernet
+  core5:
+    interfaces:
+      GigabitEthernet2:
+        link: core4-core5
+        type: ethernet
+      GigabitEthernet3:
+        link: core5-core1
+        type: ethernet

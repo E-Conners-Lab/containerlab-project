@@ -1,0 +1,23 @@
+! {{ device.name }} - Phase 3: MP-BGP Configuration
+! Generated from NetBox
+! Role: {{ 'Route Reflector' if is_route_reflector else 'RR Client' }}
+
+router bgp {{ bgp_as }}
+ bgp router-id {{ loopback_ip }}
+ bgp log-neighbor-changes
+ no bgp default ipv4-unicast
+{% for neighbor in bgp_neighbors %}
+ neighbor {{ neighbor.ip }} remote-as {{ bgp_as }}
+ neighbor {{ neighbor.ip }} update-source Loopback0
+ neighbor {{ neighbor.ip }} description {{ neighbor.description }}
+{% endfor %}
+ !
+ address-family vpnv4
+{% for neighbor in bgp_neighbors %}
+  neighbor {{ neighbor.ip }} activate
+  neighbor {{ neighbor.ip }} send-community extended
+{% if is_route_reflector and neighbor.is_client %}
+  neighbor {{ neighbor.ip }} route-reflector-client
+{% endif %}
+{% endfor %}
+ exit-address-family

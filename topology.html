@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>E-University Network Topology</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.6.1/mermaid.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a2e; padding: 20px; }
+        h1 { color: #eee; text-align: center; }
+        .mermaid { background: white; padding: 20px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <h1>E-University MPLS L3VPN Network</h1>
+    <div class="mermaid">
+flowchart TB
+    subgraph INTERNET[" ☁️ INTERNET"]
+        direction LR
+    end
+
+    subgraph GW["Internet Gateways"]
+        GW1["inet-gw1<br/>.206<br/>Lo: 10.255.0.1"]
+        GW2["inet-gw2<br/>.251<br/>Lo: 10.255.0.2"]
+    end
+
+    subgraph CORE["MPLS Core - AS 65001"]
+        direction TB
+        C1["core1 [RR]<br/>.200<br/>Lo: 10.255.1.1"]
+        C2["core2 [RR]<br/>.202<br/>Lo: 10.255.1.2"]
+        C3["core3 [P]<br/>.203<br/>Lo: 10.255.1.3"]
+        C4["core4 [P]<br/>.204<br/>Lo: 10.255.1.4"]
+        C5["core5 [RR]<br/>.205<br/>Lo: 10.255.1.5"]
+        
+        C1 <-->|"10.0.0.0/31"| C2
+        C2 <-->|"10.0.0.2/31"| C3
+        C3 <-->|"10.0.0.4/31"| C4
+        C4 <-->|"10.0.0.6/31"| C5
+        C5 <-->|"10.0.0.8/31"| C1
+    end
+
+    subgraph MAIN["🏛️ Main Campus"]
+        MA["main-agg1<br/>.208"]
+        ME1["main-edge1<br/>.209"]
+        ME2["main-edge2<br/>.210"]
+        MS["main-asw1<br/>.253"]
+        MH["main-host1<br/>.217"]
+        
+        MA --- ME1
+        MA --- ME2
+        ME1 <-.->|HA| ME2
+        ME1 --- MS
+        ME2 --- MS
+        MS --- MH
+    end
+
+    subgraph MED["🏥 Medical Campus"]
+        DA["med-agg1<br/>.211"]
+        DE1["med-edge1<br/>.212"]
+        DE2["med-edge2<br/>.213"]
+        DS["med-asw1<br/>.252"]
+        DH["med-host1<br/>.218"]
+        
+        DA --- DE1
+        DA --- DE2
+        DE1 <-.->|HA| DE2
+        DE1 --- DS
+        DE2 --- DS
+        DS --- DH
+    end
+
+    subgraph RES["🔬 Research Campus"]
+        RA["res-agg1<br/>.214"]
+        RE1["res-edge1<br/>.215"]
+        RE2["res-edge2<br/>.216"]
+        RS["res-asw1<br/>.254"]
+        RH["res-host1<br/>.219"]
+        
+        RA --- RE1
+        RA --- RE2
+        RE1 <-.->|HA| RE2
+        RE1 --- RS
+        RE2 --- RS
+        RS --- RH
+    end
+
+    INTERNET --> GW1
+    INTERNET --> GW2
+    GW1 <-->|"Gi2-Gi4"| C1
+    GW2 <-->|"Gi2-Gi4"| C2
+    
+    C1 <-->|"Gi5"| MA
+    C2 <-->|"Gi5"| MA
+    C2 <-->|"Gi6"| DA
+    C3 <-->|"Gi4"| DA
+    C4 <-->|"Gi4"| RA
+    C5 <-->|"Gi4"| RA
+
+    style INTERNET fill:#87CEEB
+    style CORE fill:#FFE4B5
+    style MAIN fill:#98FB98
+    style MED fill:#FFB6C1
+    style RES fill:#DDA0DD
+    style GW fill:#F0E68C
+    </div>
+    <script>mermaid.initialize({startOnLoad:true, theme:'default'});</script>
+</body>
+</html>
