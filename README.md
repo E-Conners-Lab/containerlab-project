@@ -61,12 +61,20 @@ containerlab-project/
 │   ├── test_phase1_core_ospf.py
 │   ├── test_phase2_mpls_ldp.py
 │   ├── test_phase3_mpbgp_rr.py
-│   └── ...
+│   ├── test_phase4_inet_gw.py
+│   ├── test_phase5_main_campus.py
+│   ├── test_phase6_med_campus.py
+│   ├── test_phase7_res_campus.py
+│   └── test_phase8_l3vpn.py
 ├── configs/
 │   ├── phase1_core_ospf/
 │   ├── phase2_mpls_ldp/
 │   ├── phase3_mpbgp_rr/
-│   └── ...
+│   ├── phase4_inet_gw/
+│   ├── phase5_main_campus/
+│   ├── phase6_medical_campus/
+│   ├── phase7_research_campus/
+│   └── phase8_vrfs_l3vpn/
 ├── templates/                 # Jinja2 config templates
 │   ├── phase1_ospf.j2
 │   ├── phase2_mpls.j2
