@@ -146,8 +146,8 @@ This project follows TDD methodology:
 | Type | Username | Password |
 |------|----------|----------|
 | Routers | admin | admin |
-| clab-host | elliot | admin123 |
-| NetBox | admin | admin123 |
+| clab-host | username | password
+| NetBox | username | password
 
 ## NetBox Integration
 
