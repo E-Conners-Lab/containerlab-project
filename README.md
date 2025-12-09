@@ -116,7 +116,7 @@ python scripts/apply_configs.py --phase 1 --device core1
 | 3 | MP-BGP Route Reflectors | Complete |
 | 4 | Internet Gateways | Complete |
 | 5 | Main Campus | Complete |
-| 6 | Medical Campus | Pending |
+| 6 | Medical Campus | Complete |
 | 7 | Research Campus | Pending |
 | 8 | VRFs and L3VPN | Pending |
 | 9 | HSRP | Pending |
