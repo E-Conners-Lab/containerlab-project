@@ -118,7 +118,7 @@ python scripts/apply_configs.py --phase 1 --device core1
 | 5 | Main Campus | Complete |
 | 6 | Medical Campus | Complete |
 | 7 | Research Campus | Complete |
-| 8 | VRFs and L3VPN | Pending |
+| 8 | VRFs and L3VPN | Complete |
 | 9 | HSRP | Pending |
 
 ## Test-Driven Development
